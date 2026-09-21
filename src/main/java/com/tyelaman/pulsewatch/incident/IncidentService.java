@@ -2,6 +2,7 @@ package com.tyelaman.pulsewatch.incident;
 
 import java.time.Duration;
 
+import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
 import com.tyelaman.pulsewatch.check.CheckResult;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,16 @@ public class IncidentService {
 
     private static final int FAILURE_THRESHOLD = 3;
 
+    private final IncidentSummaryService incidentSummaryService;
+
     private int consecutiveFailures = 0;
     private Incident latestIncident = null;
+
+    public IncidentService(
+            IncidentSummaryService incidentSummaryService) {
+
+        this.incidentSummaryService = incidentSummaryService;
+    }
 
     public void processCheck(
             String serviceName,
@@ -38,9 +47,12 @@ public class IncidentService {
                         consecutiveFailures
                 );
 
-                System.out.println(
-                        "!!! INCIDENT OPENED !!!"
-                );
+                String summary =
+                        incidentSummaryService.generateSummary(latestIncident);
+
+                latestIncident.setAiSummary(summary);
+
+                System.out.println("!!! INCIDENT OPENED !!!");
                 System.out.println(
                         "Service: " + latestIncident.getServiceName()
                 );
@@ -49,6 +61,9 @@ public class IncidentService {
                 );
                 System.out.println(
                         "HTTP status: " + latestIncident.getLastStatusCode()
+                );
+                System.out.println(
+                        "AI Summary: " + latestIncident.getAiSummary()
                 );
             }
 
@@ -65,14 +80,20 @@ public class IncidentService {
                     latestIncident.getResolvedAt()
             ).toSeconds();
 
-            System.out.println(
-                    "!!! INCIDENT RESOLVED !!!"
-            );
+            String summary =
+                    incidentSummaryService.generateSummary(latestIncident);
+
+            latestIncident.setAiSummary(summary);
+
+            System.out.println("!!! INCIDENT RESOLVED !!!");
             System.out.println(
                     "Service: " + latestIncident.getServiceName()
             );
             System.out.println(
                     "Duration: " + durationSeconds + " seconds"
+            );
+            System.out.println(
+                    "AI Summary: " + latestIncident.getAiSummary()
             );
         }
     }
