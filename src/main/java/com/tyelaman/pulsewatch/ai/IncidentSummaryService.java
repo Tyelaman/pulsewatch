@@ -26,9 +26,18 @@ public class IncidentSummaryService {
     }
 
     public String generateSummary(Incident incident) {
-        String duration = "Ongoing";
+        String duration;
 
-        if (incident.getResolvedAt() != null) {
+        if (incident.getResolvedAt() == null) {
+            long elapsedSeconds = Duration.between(
+                    incident.getStartedAt(),
+                    java.time.Instant.now()
+            ).toSeconds();
+
+            duration = "Ongoing for approximately " +
+                    elapsedSeconds + " seconds";
+        }
+        else {
             long durationSeconds = Duration.between(
                     incident.getStartedAt(),
                     incident.getResolvedAt()
@@ -38,23 +47,26 @@ public class IncidentSummaryService {
         }
 
         String prompt = """
-        You are an incident assistant for an API monitoring system.
+            You are an incident assistant for an API monitoring system.
 
-        Summarize the incident in exactly 2 concise sentences.
-        Use only the facts provided.
-        Do not guess or invent a root cause.
-        Do not use markdown.
+            Summarize the incident in exactly 2 concise sentences.
+            Use only the facts provided below.
+            Never invent a root cause, duration, event, or explanation.
+            Use the exact duration provided.
+            If the incident is OPEN, say it is ongoing.
+            If Resolved at says "Not resolved yet", do not claim recovery.
+            Do not use markdown.
 
-        Service: %s
-        URL: %s
-        Incident status: %s
-        Started at: %s
-        Resolved at: %s
-        Duration: %s
-        Last HTTP status: %s
-        Recorded failures: %d
-        """.formatted(
-                incident.getServiceName(),
+            Service: %s
+            URL: %s
+            Incident status: %s
+            Started at: %s
+            Resolved at: %s
+            Duration: %s
+            Last HTTP status: %s
+            Recorded failures: %d
+            """.formatted(
+                    incident.getServiceName(),
                 incident.getUrl(),
                 incident.getStatus(),
                 incident.getStartedAt(),
