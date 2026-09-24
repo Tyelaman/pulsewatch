@@ -14,18 +14,23 @@ public class DemoMonitorScheduler {
 
     private final HealthCheckService healthCheckService;
     private final IncidentService incidentService;
+    private final MonitorStatusService monitorStatusService;
 
     public DemoMonitorScheduler(
             HealthCheckService healthCheckService,
-            IncidentService incidentService) {
+            IncidentService incidentService,
+            MonitorStatusService monitorStatusService) {
 
         this.healthCheckService = healthCheckService;
         this.incidentService = incidentService;
+        this.monitorStatusService = monitorStatusService;
     }
 
     @Scheduled(fixedRate = 5000)
     public void checkDemoService() {
         CheckResult result = healthCheckService.check(DEMO_URL);
+
+        monitorStatusService.updateStatus(result);
 
         System.out.println(
                 "PulseWatch check: " +
