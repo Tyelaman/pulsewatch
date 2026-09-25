@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PulseWatch Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+
+<header>
+    <h1>PulseWatch</h1>
+    <p>API Monitoring and AI Incident Analysis</p>
+</header>
+
+<main>
+
+    <!-- MONITOR STATUS -->
+
+    <section class="dashboard-section">
+
+        <h2>Service Overview</h2>
+
+        <div class="status-card">
+
+            <h3>Demo Service</h3>
+
+            <p>
+                Current Status:
+                <span id="service-status">
+                        Loading...
+                    </span>
+            </p>
+
+        </div>
+
+        <div class="metrics">
+
+            <div class="metric-card">
+                <h3>Response Time</h3>
+                <p id="response-time">-- ms</p>
+            </div>
+
+            <div class="metric-card">
+                <h3>HTTP Status</h3>
+                <p id="http-status">--</p>
+            </div>
+
+            <div class="metric-card">
+                <h3>Last Checked</h3>
+                <p id="last-checked">--</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- INCIDENT DETAILS -->
+
+    <section class="dashboard-section">
+
+        <h2>Latest Incident</h2>
+
+        <div class="incident-card">
+
+            <p>
+                Incident Status:
+                <span id="incident-status">
+                        No incidents
+                    </span>
+            </p>
+
+            <p>
+                Started:
+                <span id="incident-started">--</span>
+            </p>
+
+            <p>
+                Recorded Failures:
+                <span id="failure-count">--</span>
+            </p>
+
+            <h3>AI Incident Analysis</h3>
+
+            <p id="ai-summary">
+                No incident analysis available.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- DEMO CONTROLS -->
+
+    <section class="dashboard-section">
+
+        <h2>Demo Controls</h2>
+
+        <p>
+            Simulate a service outage and recovery
+            to demonstrate PulseWatch.
+        </p>
+
+        <div class="controls">
+
+            <button id="fail-button" disabled>
+                Simulate Failure
+            </button>
+
+            <button id="recover-button" disabled>
+                Recover Service
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

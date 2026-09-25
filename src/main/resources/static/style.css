@@ -1,0 +1,237 @@
+/* GLOBAL STYLES */
+
+:root {
+    --background: #0b1120;
+    --card-background: #151e30;
+    --border: #293548;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --primary: #3b82f6;
+    --success: #22c55e;
+    --danger: #ef4444;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--background);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+
+/* HEADER */
+
+header {
+    padding: 28px 8%;
+    background-color: var(--card-background);
+    border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 32px;
+    letter-spacing: -1px;
+}
+
+header p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+
+/* MAIN LAYOUT */
+
+main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 24px;
+}
+
+.dashboard-section {
+    margin-bottom: 40px;
+}
+
+.dashboard-section h2 {
+    margin-bottom: 18px;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+
+/* SERVICE STATUS */
+
+.status-card {
+    padding: 25px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.status-card h3 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+.status-card p {
+    margin-bottom: 0;
+    color: var(--muted);
+}
+
+#service-status {
+    font-weight: bold;
+    color: var(--muted);
+}
+
+
+/* STATUS INDICATORS */
+
+#service-status.status-up {
+    color: var(--success);
+}
+
+#service-status.status-down {
+    color: var(--danger);
+}
+
+#incident-status.status-open {
+    color: var(--danger);
+}
+
+#incident-status.status-resolved {
+    color: var(--success);
+}
+
+
+/* METRICS */
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.metric-card {
+    padding: 24px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.metric-card h3 {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: normal;
+    margin-top: 0;
+}
+
+.metric-card p {
+    margin: 12px 0 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* INCIDENT DETAILS */
+
+.incident-card {
+    padding: 25px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.incident-card p {
+    color: var(--muted);
+}
+
+#incident-status {
+    color: var(--text);
+    font-weight: bold;
+}
+
+.incident-card h3 {
+    margin-top: 30px;
+    margin-bottom: 12px;
+    font-size: 17px;
+}
+
+#ai-summary {
+    padding: 20px;
+    background-color: var(--background);
+    border-left: 3px solid var(--primary);
+    border-radius: 6px;
+    color: var(--text);
+    line-height: 1.8;
+}
+
+
+/* DEMO CONTROLS */
+
+.controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#fail-button {
+    background-color: var(--danger);
+    color: white;
+}
+
+#recover-button {
+    background-color: var(--success);
+    color: #052e16;
+}
+
+button:hover:not(:disabled) {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 768px) {
+    header {
+        padding: 24px;
+    }
+
+    main {
+        margin: 24px auto;
+    }
+
+    .metrics {
+        grid-template-columns: 1fr;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
