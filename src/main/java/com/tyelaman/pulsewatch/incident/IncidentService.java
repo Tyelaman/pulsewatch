@@ -1,6 +1,7 @@
 package com.tyelaman.pulsewatch.incident;
 
 import java.time.Duration;
+import java.time.Instant;
 
 import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
 import com.tyelaman.pulsewatch.check.CheckResult;
@@ -14,6 +15,7 @@ public class IncidentService {
     private final IncidentSummaryService incidentSummaryService;
 
     private int consecutiveFailures = 0;
+    private Instant firstFailureAt = null;
     private Incident latestIncident = null;
 
     public IncidentService(
@@ -27,6 +29,9 @@ public class IncidentService {
             CheckResult result) {
 
         if ("DOWN".equals(result.status())) {
+            if (consecutiveFailures == 0) {
+                firstFailureAt = result.checkedAt();
+            }
             consecutiveFailures++;
 
             System.out.println(
@@ -42,7 +47,7 @@ public class IncidentService {
                 latestIncident = new Incident(
                         serviceName,
                         result.url(),
-                        result.checkedAt(),
+                        firstFailureAt,
                         result.statusCode(),
                         consecutiveFailures
                 );
@@ -71,6 +76,7 @@ public class IncidentService {
         }
 
         consecutiveFailures = 0;
+        firstFailureAt = null;
 
         if (latestIncident != null && latestIncident.isOpen()) {
             latestIncident.resolve(result.checkedAt());

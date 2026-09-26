@@ -1,7 +1,6 @@
 package com.tyelaman.pulsewatch.ai;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -51,16 +50,28 @@ public class IncidentSummaryService {
 
     public String generateSummary(Incident incident) {
 
-        String duration;
+        String prompt;
 
-        if (incident.getResolvedAt() == null) {
-            long elapsedSeconds = Duration.between(
-                    incident.getStartedAt(),
-                    Instant.now()
-            ).toSeconds();
+        if (incident.isOpen()) {
+            prompt = """
+            You are an incident assistant for an API monitoring system.
 
-            duration = "Ongoing for approximately " +
-                    elapsedSeconds + " seconds";
+            Summarize this ongoing incident in exactly two sentences.
+
+            Rules:
+            - State that the incident is ongoing.
+            - Mention the observed HTTP status.
+            - Do not mention duration, timestamps, or failure counts.
+            - Never invent a root cause or speculate.
+            - Use only the supplied information.
+            - Do not use markdown.
+
+            Service: %s
+            Latest failed HTTP status: %s
+            """.formatted(
+                    incident.getServiceName(),
+                    incident.getLastStatusCode()
+            );
         }
         else {
             long durationSeconds = Duration.between(
@@ -68,40 +79,32 @@ public class IncidentSummaryService {
                     incident.getResolvedAt()
             ).toSeconds();
 
-            duration = durationSeconds + " seconds";
+            prompt = """
+            You are an incident assistant for an API monitoring system.
+
+            Summarize this resolved incident in exactly two sentences.
+
+            Rules:
+            - Mention that the service recovered.
+            - Include the exact duration in seconds.
+            - Include the final recorded failure count.
+            - Mention the observed HTTP status.
+            - Never invent a root cause or speculate.
+            - Do not include timestamps.
+            - Do not use markdown.
+
+            Service: %s
+            Incident status: RESOLVED
+            Duration: %d seconds
+            Final recorded failures: %d
+            Last failed HTTP status: %s
+            """.formatted(
+                    incident.getServiceName(),
+                    durationSeconds,
+                    incident.getFailureCount(),
+                    incident.getLastStatusCode()
+            );
         }
-
-        String prompt = """
-                You are an incident assistant for an API monitoring system.
-
-                Summarize the incident in exactly 2 concise sentences.
-                Use only the facts provided below.
-                Never invent a root cause, duration, event, or explanation.
-                Use the exact duration provided.
-                If the incident is OPEN, say it is ongoing.
-                If the incident is RESOLVED, mention recovery.
-                Do not use markdown.
-
-                Service: %s
-                URL: %s
-                Incident status: %s
-                Started at: %s
-                Resolved at: %s
-                Duration: %s
-                Last HTTP status: %s
-                Recorded failures: %d
-                """.formatted(
-                incident.getServiceName(),
-                incident.getUrl(),
-                incident.getStatus(),
-                incident.getStartedAt(),
-                incident.getResolvedAt() == null
-                        ? "Not resolved yet"
-                        : incident.getResolvedAt(),
-                duration,
-                incident.getLastStatusCode(),
-                incident.getFailureCount()
-        );
 
         try {
             if ("groq".equalsIgnoreCase(provider)) {

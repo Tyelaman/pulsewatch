@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo")
 public class DemoServiceController {
 
-    private boolean healthy = true;
+    private volatile boolean healthy = true;
 
     @GetMapping("/target")
     public ResponseEntity<String> getTarget() {
