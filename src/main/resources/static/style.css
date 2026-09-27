@@ -235,3 +235,42 @@ button:disabled {
         width: 100%;
     }
 }
+
+/* DEMO AUTHENTICATION */
+
+#demo-auth {
+    margin-bottom: 24px;
+}
+
+#demo-auth label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+#demo-auth p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+#demo-token {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+
+    background-color: var(--background);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+#demo-token:focus {
+    outline: 2px solid var(--primary);
+}
+
+#demo-auth[hidden] {
+    display: none;
+}

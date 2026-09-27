@@ -19,6 +19,11 @@ const aiSummary = document.getElementById("ai-summary");
 const failButton = document.getElementById("fail-button");
 const recoverButton = document.getElementById("recover-button");
 
+const demoAuth = document.getElementById("demo-auth");
+const demoTokenInput = document.getElementById("demo-token");
+
+let demoToken = null;
+
 let actionRunning = false;
 let serverAvailable = false;
 
@@ -162,27 +167,59 @@ async function sendDemoCommand(url) {
         return;
     }
 
+    const token = demoToken ?? demoTokenInput.value.trim();
+
+    if (!token) {
+        alert("Please enter your demo access token.");
+        demoTokenInput.focus();
+        return;
+    }
+
     actionRunning = true;
     updateButtons();
 
     try {
         const response = await fetch(url, {
-            method: "POST"
+            method: "POST",
+            headers: {
+                "X-Demo-Token": token
+            }
         });
+
+        if (response.status === 403) {
+            demoToken = null;
+            demoTokenInput.value = "";
+            demoAuth.hidden = false;
+
+            throw new Error("INVALID_TOKEN");
+        }
 
         if (!response.ok) {
             throw new Error("Demo command failed");
         }
+
+        // Remember the token after successful authentication.
+        demoToken = token;
+
+        // Remove the token from the visible input.
+        demoTokenInput.value = "";
+        demoAuth.hidden = true;
 
         await refreshDashboard();
     }
     catch (error) {
         console.error("Demo command error:", error);
 
-        alert(
-            "Could not execute the demo command. " +
-            "Check that PulseWatch is running."
-        );
+        if (error.message === "INVALID_TOKEN") {
+            alert("Incorrect demo access token.");
+            demoTokenInput.focus();
+        }
+        else {
+            alert(
+                "Could not execute the demo command. " +
+                "Check that PulseWatch is running."
+            );
+        }
     }
     finally {
         actionRunning = false;
