@@ -4,7 +4,8 @@ import java.time.Duration;
 import java.time.Instant;
 
 import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
-import com.tyelaman.pulsewatch.check.CheckResult;
+import com.tyelaman.pulsewatch.model.CheckResult;
+import com.tyelaman.pulsewatch.model.Incident;
 import org.springframework.stereotype.Service;
 
 @Service

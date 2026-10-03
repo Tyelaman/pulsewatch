@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.incident;
+package com.tyelaman.pulsewatch.model;
 
 import java.time.Instant;
 

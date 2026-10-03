@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.demo;
+package com.tyelaman.pulsewatch.controller;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

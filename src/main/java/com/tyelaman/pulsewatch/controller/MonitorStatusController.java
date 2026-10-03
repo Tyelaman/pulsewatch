@@ -1,6 +1,8 @@
-package com.tyelaman.pulsewatch.monitor;
+package com.tyelaman.pulsewatch.controller;
 
-import com.tyelaman.pulsewatch.check.CheckResult;
+import com.tyelaman.pulsewatch.model.CheckResult;
+import com.tyelaman.pulsewatch.service.MonitorStatusService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

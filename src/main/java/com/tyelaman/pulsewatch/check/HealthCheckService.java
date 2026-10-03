@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.tyelaman.pulsewatch.model.CheckResult;
 import org.springframework.stereotype.Service;
 
 @Service

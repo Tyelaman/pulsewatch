@@ -1,8 +1,9 @@
-package com.tyelaman.pulsewatch.monitor;
+package com.tyelaman.pulsewatch.scheduler;
 
-import com.tyelaman.pulsewatch.check.CheckResult;
 import com.tyelaman.pulsewatch.check.HealthCheckService;
 import com.tyelaman.pulsewatch.incident.IncidentService;
+import com.tyelaman.pulsewatch.model.CheckResult;
+import com.tyelaman.pulsewatch.service.MonitorStatusService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +34,7 @@ public class DemoMonitorScheduler {
     public void checkDemoService() {
         CheckResult result = healthCheckService.check(demoUrl);
 
-        monitorStatusService.updateStatus(result);
+        monitorStatusService.updateLatestResult(result);
 
         System.out.println(
                 "PulseWatch check: " +

@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tyelaman.pulsewatch.incident.Incident;
+import com.tyelaman.pulsewatch.model.Incident;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
