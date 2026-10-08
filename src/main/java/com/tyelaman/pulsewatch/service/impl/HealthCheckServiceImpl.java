@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.check;
+package com.tyelaman.pulsewatch.service.impl;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -8,15 +8,18 @@ import java.time.Duration;
 import java.time.Instant;
 
 import com.tyelaman.pulsewatch.model.CheckResult;
+import com.tyelaman.pulsewatch.service.HealthCheckService;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class HealthCheckService {
+public class HealthCheckServiceImpl implements HealthCheckService {
 
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
             .build();
 
+    @Override
     public CheckResult check(String url) {
         long startTime = System.nanoTime();
 
