@@ -1,6 +1,6 @@
 package com.tyelaman.pulsewatch.controller;
 
-import com.tyelaman.pulsewatch.incident.IncidentService;
+import com.tyelaman.pulsewatch.service.IncidentService;
 import com.tyelaman.pulsewatch.model.Incident;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

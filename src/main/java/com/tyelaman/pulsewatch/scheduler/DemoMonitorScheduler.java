@@ -1,7 +1,7 @@
 package com.tyelaman.pulsewatch.scheduler;
 
 import com.tyelaman.pulsewatch.service.HealthCheckService;
-import com.tyelaman.pulsewatch.incident.IncidentService;
+import com.tyelaman.pulsewatch.service.IncidentService;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.service.MonitorStatusService;
 

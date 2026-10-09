@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.incident;
+package com.tyelaman.pulsewatch.service.impl;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -6,11 +6,12 @@ import java.time.Instant;
 import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.model.Incident;
+import com.tyelaman.pulsewatch.service.IncidentService;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class IncidentService {
-
+public class IncidentServiceImpl implements IncidentService {
     private static final int FAILURE_THRESHOLD = 3;
 
     private final IncidentSummaryService incidentSummaryService;
@@ -19,12 +20,12 @@ public class IncidentService {
     private Instant firstFailureAt = null;
     private Incident latestIncident = null;
 
-    public IncidentService(
+    public IncidentServiceImpl(
             IncidentSummaryService incidentSummaryService) {
 
         this.incidentSummaryService = incidentSummaryService;
     }
-
+    @Override
     public void processCheck(
             String serviceName,
             CheckResult result) {
@@ -104,7 +105,7 @@ public class IncidentService {
             );
         }
     }
-
+    @Override
     public Incident getLatestIncident() {
         return latestIncident;
     }
