@@ -1,6 +1,6 @@
 package com.tyelaman.pulsewatch.scheduler;
 
-import com.tyelaman.pulsewatch.service.impl.HealthCheckServiceImpl;
+import com.tyelaman.pulsewatch.service.HealthCheckService;
 import com.tyelaman.pulsewatch.incident.IncidentService;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.service.MonitorStatusService;
@@ -14,25 +14,25 @@ public class DemoMonitorScheduler {
 
     private final String demoUrl;
 
-    private final HealthCheckServiceImpl healthCheckServiceImpl;
+    private final HealthCheckService healthCheckService;
     private final IncidentService incidentService;
     private final MonitorStatusService monitorStatusService;
 
     public DemoMonitorScheduler(
             @Value("${pulsewatch.demo.url}") String demoUrl,
-            HealthCheckServiceImpl healthCheckServiceImpl,
+            HealthCheckService healthCheckService,
             IncidentService incidentService,
             MonitorStatusService monitorStatusService) {
 
         this.demoUrl = demoUrl;
-        this.healthCheckServiceImpl = healthCheckServiceImpl;
+        this.healthCheckService = healthCheckService;
         this.incidentService = incidentService;
         this.monitorStatusService = monitorStatusService;
     }
 
     @Scheduled(fixedRate = 5000)
     public void checkDemoService() {
-        CheckResult result = healthCheckServiceImpl.check(demoUrl);
+        CheckResult result = healthCheckService.check(demoUrl);
 
         monitorStatusService.updateLatestResult(result);
 
