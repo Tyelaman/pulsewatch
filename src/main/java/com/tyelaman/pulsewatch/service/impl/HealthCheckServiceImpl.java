@@ -7,6 +7,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.Instant;
 
+import com.tyelaman.pulsewatch.enums.CheckStatus;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.service.HealthCheckService;
 
@@ -38,10 +39,10 @@ public class HealthCheckServiceImpl implements HealthCheckService {
             long responseTimeMs =
                     (System.nanoTime() - startTime) / 1_000_000;
 
-            String status =
+            CheckStatus status =
                     response.statusCode() >= 200 && response.statusCode() < 400
-                            ? "UP"
-                            : "DOWN";
+                            ? CheckStatus.UP
+                            : CheckStatus.DOWN;
 
             return new CheckResult(
                     url,
@@ -58,7 +59,7 @@ public class HealthCheckServiceImpl implements HealthCheckService {
 
             return new CheckResult(
                     url,
-                    "DOWN",
+                    CheckStatus.DOWN,
                     null,
                     responseTimeMs,
                     Instant.now(),

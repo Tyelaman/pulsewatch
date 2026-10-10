@@ -2,7 +2,7 @@ package com.tyelaman.pulsewatch.service.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-
+import com.tyelaman.pulsewatch.enums.CheckStatus;
 import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.model.Incident;
@@ -30,7 +30,7 @@ public class IncidentServiceImpl implements IncidentService {
             String serviceName,
             CheckResult result) {
 
-        if ("DOWN".equals(result.status())) {
+        if (result.status() == CheckStatus.DOWN) {
             if (consecutiveFailures == 0) {
                 firstFailureAt = result.checkedAt();
             }

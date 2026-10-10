@@ -1,12 +1,13 @@
 package com.tyelaman.pulsewatch.model;
 
+import com.tyelaman.pulsewatch.enums.IncidentStatus;
 import java.time.Instant;
 
 public class Incident {
 
     private final String serviceName;
     private final String url;
-    private String status;
+    private IncidentStatus status;
     private final Instant startedAt;
     private Instant resolvedAt;
     private Integer lastStatusCode;
@@ -22,7 +23,7 @@ public class Incident {
 
         this.serviceName = serviceName;
         this.url = url;
-        this.status = "OPEN";
+        this.status = IncidentStatus.OPEN;
         this.startedAt = startedAt;
         this.resolvedAt = null;
         this.lastStatusCode = lastStatusCode;
@@ -36,12 +37,12 @@ public class Incident {
     }
 
     public void resolve(Instant resolvedAt) {
-        status = "RESOLVED";
+        status = IncidentStatus.RESOLVED;
         this.resolvedAt = resolvedAt;
     }
 
     public boolean isOpen() {
-        return "OPEN".equals(status);
+        return status == IncidentStatus.OPEN;
     }
 
     public String getServiceName() {
@@ -52,9 +53,7 @@ public class Incident {
         return url;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public IncidentStatus getStatus() { return status; }
 
     public Instant getStartedAt() {
         return startedAt;
