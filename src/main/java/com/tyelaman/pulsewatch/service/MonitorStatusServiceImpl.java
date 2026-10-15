@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.service.impl;
+package com.tyelaman.pulsewatch.service;
 
 import com.tyelaman.pulsewatch.model.CheckResult;
 import com.tyelaman.pulsewatch.service.MonitorStatusService;

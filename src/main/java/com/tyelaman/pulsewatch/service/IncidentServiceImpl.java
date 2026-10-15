@@ -1,4 +1,4 @@
-package com.tyelaman.pulsewatch.service.impl;
+package com.tyelaman.pulsewatch.service;
 
 import java.time.Duration;
 import java.time.Instant;
