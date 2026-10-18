@@ -1,11 +1,10 @@
-package com.tyelaman.pulsewatch.service.impl;
+package com.tyelaman.pulsewatch.service;
 
 import com.tyelaman.pulsewatch.ai.IncidentSummaryService;
 import com.tyelaman.pulsewatch.enums.CheckStatus;
 import com.tyelaman.pulsewatch.model.CheckResult;
 
 import com.tyelaman.pulsewatch.enums.IncidentStatus;
-import com.tyelaman.pulsewatch.service.IncidentServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
