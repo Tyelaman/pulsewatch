@@ -14,7 +14,7 @@ and generates AI-powered summaries of outages and recoveries.
 - Automatic incident recovery detection
 - AI-generated incident summaries using Ollama or Groq
 - Interactive monitoring dashboard
-- Protected failure and recovery simulation controls
+- Token-free, session-isolated failure and recovery controls
 - Docker support
 
 ## Tech Stack
@@ -29,7 +29,8 @@ and generates AI-powered summaries of outages and recoveries.
 
 ## How It Works
 
-1. PulseWatch checks the monitored service every five seconds.
+1. While the dashboard is open, PulseWatch checks the visitor's
+   simulated service every five seconds.
 2. Three consecutive failures trigger an incident.
 3. The selected AI provider generates an incident summary.
 4. The dashboard displays monitoring and incident information.
@@ -60,11 +61,9 @@ Open the dashboard at localhost:8080.
 
 | Variable | Description |
 |---|---|
-| AI_PROVIDER | ollama or groq |
+| AI_PROVIDER | AI provider: ollama or groq |
 | GROQ_API_KEY | Groq API key |
-| DEMO_TOKEN | Secret token protecting demo controls |
 | PORT | Application port (default: 8080) |
-| DEMO_URL | Optional monitored demo URL |
 
 Never commit API keys or access tokens.
 

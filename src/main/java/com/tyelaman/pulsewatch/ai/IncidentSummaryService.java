@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+
 @Service
 public class IncidentSummaryService {
 
@@ -24,13 +25,16 @@ public class IncidentSummaryService {
     private final RestClient ollamaClient;
     private final RestClient groqClient;
 
+    private final AiRequestLimiter aiRequestLimiter;
+
     public IncidentSummaryService(
             @Value("${pulsewatch.ai.provider}") String provider,
             @Value("${pulsewatch.ai.ollama.url}") String ollamaUrl,
             @Value("${pulsewatch.ai.ollama.model}") String ollamaModel,
             @Value("${pulsewatch.ai.groq.url}") String groqUrl,
             @Value("${pulsewatch.ai.groq.model}") String groqModel,
-            @Value("${pulsewatch.ai.groq.api-key}") String groqApiKey) {
+            @Value("${pulsewatch.ai.groq.api-key}") String groqApiKey,
+            AiRequestLimiter aiRequestLimiter) {
 
         this.provider = provider;
         this.ollamaModel = ollamaModel;
@@ -44,7 +48,7 @@ public class IncidentSummaryService {
         this.groqClient = RestClient.builder()
                 .baseUrl(groqUrl)
                 .build();
-
+        this.aiRequestLimiter = aiRequestLimiter;
         System.out.println("AI provider: " + provider);
     }
 
@@ -104,6 +108,10 @@ public class IncidentSummaryService {
                     incident.getFailureCount(),
                     incident.getLastStatusCode()
             );
+        }
+
+        if (!aiRequestLimiter.tryAcquire()) {
+            return "AI summary temporarily unavailable: hourly request limit reached.";
         }
 
         try {

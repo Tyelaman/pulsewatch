@@ -1,8 +1,8 @@
-const API_STATUS = "/api/status";
-const API_INCIDENT = "/api/incidents/latest";
+const API_STATUS = "/api/demo-session/check-result";
+const API_INCIDENT = "/api/demo-session/incident";
 
-const DEMO_FAIL = "/demo/fail";
-const DEMO_RECOVER = "/demo/recover";
+const DEMO_FAIL = "/api/demo-session/fail";
+const DEMO_RECOVER = "/api/demo-session/recover";
 
 const REFRESH_INTERVAL = 5000;
 
@@ -18,11 +18,6 @@ const aiSummary = document.getElementById("ai-summary");
 
 const failButton = document.getElementById("fail-button");
 const recoverButton = document.getElementById("recover-button");
-
-const demoAuth = document.getElementById("demo-auth");
-const demoTokenInput = document.getElementById("demo-token");
-
-let demoToken = null;
 
 let actionRunning = false;
 let serverAvailable = false;
@@ -167,59 +162,27 @@ async function sendDemoCommand(url) {
         return;
     }
 
-    const token = demoToken ?? demoTokenInput.value.trim();
-
-    if (!token) {
-        alert("Please enter your demo access token.");
-        demoTokenInput.focus();
-        return;
-    }
-
     actionRunning = true;
     updateButtons();
 
     try {
         const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "X-Demo-Token": token
-            }
+            method: "POST"
         });
-
-        if (response.status === 403) {
-            demoToken = null;
-            demoTokenInput.value = "";
-            demoAuth.hidden = false;
-
-            throw new Error("INVALID_TOKEN");
-        }
 
         if (!response.ok) {
             throw new Error("Demo command failed");
         }
-
-        // Remember the token after successful authentication.
-        demoToken = token;
-
-        // Remove the token from the visible input.
-        demoTokenInput.value = "";
-        demoAuth.hidden = true;
 
         await refreshDashboard();
     }
     catch (error) {
         console.error("Demo command error:", error);
 
-        if (error.message === "INVALID_TOKEN") {
-            alert("Incorrect demo access token.");
-            demoTokenInput.focus();
-        }
-        else {
-            alert(
-                "Could not execute the demo command. " +
-                "Check that PulseWatch is running."
-            );
-        }
+        alert(
+            "Could not execute the demo command. " +
+            "Check that PulseWatch is running."
+        );
     }
     finally {
         actionRunning = false;
