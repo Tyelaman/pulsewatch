@@ -61,4 +61,26 @@ class MonitorServiceImplTest {
 
         assertEquals(0, monitorService.getMonitors().size());
     }
+
+    @Test
+    void should_reject_more_than_five_monitors() {
+        MonitorPresetCatalog presetCatalog =
+                new MonitorPresetCatalog();
+
+        MonitorService monitorService =
+                new MonitorServiceImpl(presetCatalog);
+
+        for (int i = 0; i < 5; i++) {
+            monitorService.addMonitor("jsonplaceholder");
+        }
+
+        assertEquals(5, monitorService.getMonitors().size());
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> monitorService.addMonitor("jsonplaceholder")
+        );
+
+        assertEquals(5, monitorService.getMonitors().size());
+    }
 }

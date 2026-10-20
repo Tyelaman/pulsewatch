@@ -5,7 +5,11 @@ import com.tyelaman.pulsewatch.service.MonitorService;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +26,41 @@ public class MonitorController {
     @GetMapping
     public List<Monitor> getMonitors() {
         return monitorService.getMonitors();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addMonitor(
+            @RequestBody(required = false) AddMonitorRequest request) {
+
+        if (request == null ||
+                request.presetKey() == null ||
+                request.presetKey().isBlank()) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body("Preset key is required");
+        }
+
+        try {
+            Monitor monitor =
+                    monitorService.addMonitor(request.presetKey());
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(monitor);
+        }
+        catch (IllegalArgumentException exception) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Unknown preset key");
+        }
+        catch (IllegalStateException exception) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body("Maximum of 5 monitors per session reached");
+        }
+    }
+
+    public record AddMonitorRequest(String presetKey) {
     }
 }
