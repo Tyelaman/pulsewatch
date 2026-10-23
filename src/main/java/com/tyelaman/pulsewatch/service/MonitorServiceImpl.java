@@ -3,6 +3,8 @@ package com.tyelaman.pulsewatch.service;
 import com.tyelaman.pulsewatch.model.Monitor;
 import com.tyelaman.pulsewatch.preset.MonitorPreset;
 import com.tyelaman.pulsewatch.preset.MonitorPresetCatalog;
+import com.tyelaman.pulsewatch.model.CheckResult;
+import java.util.NoSuchElementException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +20,14 @@ public class MonitorServiceImpl implements MonitorService {
     private final List<Monitor> monitors = new ArrayList<>();
     private long nextId = 1L;
     private static final int MAX_MONITORS_PER_SESSION = 5;
+    private final HealthCheckService healthCheckService;
 
-    public MonitorServiceImpl(MonitorPresetCatalog presetCatalog) {
+    public MonitorServiceImpl(
+            MonitorPresetCatalog presetCatalog,
+            HealthCheckService healthCheckService) {
+
         this.presetCatalog = presetCatalog;
+        this.healthCheckService = healthCheckService;
     }
 
     @Override
@@ -51,5 +58,23 @@ public class MonitorServiceImpl implements MonitorService {
     @Override
     public synchronized List<Monitor> getMonitors() {
         return List.copyOf(monitors);
+    }
+
+    @Override
+    public synchronized Monitor checkMonitor(long monitorId) {
+        for (Monitor monitor : monitors) {
+            if (monitor.getId() == monitorId) {
+                CheckResult result =
+                        healthCheckService.check(monitor.getUrl());
+
+                monitor.recordCheck(result.status());
+
+                return monitor;
+            }
+        }
+
+        throw new NoSuchElementException(
+                "Monitor not found: " + monitorId
+        );
     }
 }

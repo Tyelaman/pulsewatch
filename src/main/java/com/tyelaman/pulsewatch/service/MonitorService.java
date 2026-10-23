@@ -9,4 +9,6 @@ public interface MonitorService {
     Monitor addMonitor(String presetKey);
 
     List<Monitor> getMonitors();
+
+    Monitor checkMonitor(long monitorId);
 }

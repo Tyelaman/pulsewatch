@@ -5,6 +5,8 @@ import com.tyelaman.pulsewatch.service.MonitorService;
 
 import java.util.List;
 
+import java.util.NoSuchElementException;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +60,20 @@ public class MonitorController {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Maximum of 5 monitors per session reached");
+        }
+    }
+
+    @PostMapping("/{id}/check")
+    public ResponseEntity<?> checkMonitor(@PathVariable long id) {
+        try {
+            Monitor monitor = monitorService.checkMonitor(id);
+
+            return ResponseEntity.ok(monitor);
+        }
+        catch (NoSuchElementException exception) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Monitor not found: " + id);
         }
     }
 
