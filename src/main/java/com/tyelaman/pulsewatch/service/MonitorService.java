@@ -10,5 +10,7 @@ public interface MonitorService {
 
     List<Monitor> getMonitors();
 
+    List<Monitor> checkDueMonitors();
+
     Monitor checkMonitor(long monitorId);
 }

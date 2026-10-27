@@ -1,4 +1,5 @@
 package com.tyelaman.pulsewatch.model;
+import java.time.Instant;
 
 import com.tyelaman.pulsewatch.enums.CheckStatus;
 
@@ -12,6 +13,8 @@ public class Monitor {
     private CheckStatus status;
     private int consecutiveFailures;
 
+    private Instant lastCheckedAt;
+
     public Monitor(
             Long id,
             String name,
@@ -24,6 +27,7 @@ public class Monitor {
         this.intervalSeconds = intervalSeconds;
         this.status = CheckStatus.UNKNOWN;
         this.consecutiveFailures = 0;
+        this.lastCheckedAt = null;
     }
 
     public Long getId() {
@@ -50,6 +54,20 @@ public class Monitor {
         return consecutiveFailures;
     }
 
+    public Instant getLastCheckedAt() {
+        return lastCheckedAt;
+    }
+
+    public boolean isCheckDue(Instant now) {
+        if (lastCheckedAt == null) {
+            return true;
+        }
+
+        return !now.isBefore(
+                lastCheckedAt.plusSeconds(intervalSeconds)
+        );
+    }
+
     public void recordCheck(CheckStatus checkStatus) {
         status = checkStatus;
 
@@ -59,5 +77,6 @@ public class Monitor {
         else {
             consecutiveFailures = 0;
         }
+        lastCheckedAt = Instant.now();
     }
 }

@@ -6,6 +6,7 @@ import com.tyelaman.pulsewatch.preset.MonitorPresetCatalog;
 import com.tyelaman.pulsewatch.model.CheckResult;
 import java.util.NoSuchElementException;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +77,18 @@ public class MonitorServiceImpl implements MonitorService {
         throw new NoSuchElementException(
                 "Monitor not found: " + monitorId
         );
+    }
+
+    @Override
+    public synchronized List<Monitor> checkDueMonitors() {
+        Instant now = Instant.now();
+
+        for (Monitor monitor : monitors) {
+            if (monitor.isCheckDue(now)) {
+                checkMonitor(monitor.getId());
+            }
+        }
+
+        return List.copyOf(monitors);
     }
 }

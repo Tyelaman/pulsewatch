@@ -227,4 +227,38 @@ class MonitorServiceImplTest {
         Mockito.verify(healthCheckService, Mockito.times(3))
                 .check(monitor.getUrl());
     }
+
+    @Test
+    void should_not_repeat_check_before_interval() {
+        MonitorPresetCatalog presetCatalog =
+                new MonitorPresetCatalog();
+
+        HealthCheckService healthCheckService =
+                Mockito.mock(HealthCheckService.class);
+
+        MonitorService monitorService =
+                new MonitorServiceImpl(presetCatalog, healthCheckService);
+
+        Monitor monitor = monitorService.addMonitor("jsonplaceholder");
+
+        CheckResult successfulResult = new CheckResult(
+                monitor.getUrl(),
+                CheckStatus.UP,
+                200,
+                45L,
+                Instant.now(),
+                null
+        );
+
+        Mockito.when(healthCheckService.check(monitor.getUrl()))
+                .thenReturn(successfulResult);
+
+        monitorService.checkDueMonitors();
+        monitorService.checkDueMonitors();
+
+        assertEquals(CheckStatus.UP, monitor.getStatus());
+
+        Mockito.verify(healthCheckService, Mockito.times(1))
+                .check(monitor.getUrl());
+    }
 }
