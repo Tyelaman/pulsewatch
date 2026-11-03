@@ -77,6 +77,11 @@ public class MonitorController {
         }
     }
 
+    @PostMapping("/check-due")
+    public List<Monitor> checkDueMonitors() {
+        return monitorService.checkDueMonitors();
+    }
+
     public record AddMonitorRequest(String presetKey) {
     }
 }
